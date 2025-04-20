@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Trip</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, select, button {
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: limegreen;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: darkgreen;
+    }
+  </style>
+</head>
+<body>
+    <a href="/">Home</a> | <a href="/home">View Trips</a>
+  <h2>Add a Trip</h2>
+  <form id="add-trip-form">
+    <input type="text" name="pickup" id="pickup" placeholder="Pickup" required />
+    <input type="text" name="destination" id="destination" placeholder="Destination" required />
+    <input type="text" name="time" id="time" placeholder="Time (e.g. 08:30 AM)" required />
+    <select name="status" id="status" required>
+      <option value="Pending">Pending</option>
+      <option value="Ongoing">Ongoing</option>
+      <option value="Completed">Completed</option>
+    </select>
+    <button type="submit">Submit Trip</button>
+  </form>
+
+  <script>
+    document.getElementById('add-trip-form').addEventListener('submit', async function(event) {
+      event.preventDefault();  // Prevent the default form submission
+
+      const tripData = {
+        pickup: document.getElementById('pickup').value,
+        destination: document.getElementById('destination').value,
+        time: document.getElementById('time').value,
+        status: document.getElementById('status').value
+      };
+
+      try {
+        const response = await fetch('/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(tripData)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          alert('Trip added successfully!');
+        } else {
+          throw new Error('Failed to add trip');
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  </script>
+</body>
+</html>
